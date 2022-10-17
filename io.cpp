@@ -32,6 +32,10 @@ Graph read(const string& path) {
                 j++;
             }
             neighbours.push_back(P2);
+            if (line[j] == ',')
+                j += 2;
+            if (line[j] == ';')
+                break;
         }
 
         Node node = Node(P1);
@@ -77,6 +81,8 @@ void show(Graph g) {
             cout << it->getId();
             prev(end(nbrs))->getId() == it->getId() ? cout << ';' : cout << ", ";
         }
+        if (nbrs.size() == 0)
+            cout << ';';
         cout << endl;
     }
 }
