@@ -1,11 +1,10 @@
 #pragma once
 #include <map>
-#include <set>
 #include <string>
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <queue>
+#include <set>
 
 using namespace std;
 
@@ -15,7 +14,7 @@ const int INF = INT_MAX;
 class Node {
 public:
     Node(string id);
-    //bool operator== (const Node &n);
+    bool operator== (const Node &n) const;
     bool operator< (const Node &n) const;
     string getId() const;
     vector<int> getEvents();
@@ -39,7 +38,7 @@ private:
 /*класс графа*/
 class Graph {
 public:
-	//bool operator== (Graph &g); //сравнение графов
+	bool operator== (const Graph g) const; //сравнение графов
     explicit Graph(vector <Node> g); //конструктор
 	Graph(); //пустой граф
 	Graph(const Graph &g); //конструктор-копия
@@ -48,7 +47,7 @@ public:
 	int getN(); //количество вершин
 	int OutEdge(string p); //подсчет количества исходящих ребер из вершины р
 	int InEdge(string p); //подсчет количества входящих ребер из вершины р
-    vector <Node> getG(); // геттер графа
+    vector <Node> getG() const; // геттер графа
 	void addN(Node n); // добавить вершину
 	void delN(Node n); // удалить вершину
 

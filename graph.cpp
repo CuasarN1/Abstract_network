@@ -21,15 +21,15 @@ Graph::Graph(vector <Node> g) {
     G = std::move(g);
 }
 
-//bool Graph::operator== (Graph &g) {
-//	return 	n == g.n and G == g.getG();
-//}
+bool Graph::operator== (const Graph g) const {
+	return 	n == g.n and G == g.getG();
+}
 
 bool Graph::empty() {
 	return G.empty();
 }
 
-vector<Node> Graph::getG() {
+vector<Node> Graph::getG() const {
 	return G;
 }
 

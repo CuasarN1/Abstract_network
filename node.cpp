@@ -15,9 +15,9 @@ Node::Node(string _id) {
     id = std::move(_id);
 }
 
-//bool Node::operator== (const Node &n) {
-//    return id == n.getId();
-//}
+bool Node::operator== (const Node &n) const {
+    return id == n.getId();
+}
 
 bool Node::operator<(const Node &n) const {
     return id < n.getId();
