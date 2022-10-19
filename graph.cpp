@@ -68,7 +68,7 @@ void Graph::addN(Node node) {
         cout << "Вершина уже существует" << endl;
 }
 
-void Graph::delN(Node node)
+void Graph::delN(const Node& node)
 {
     auto it = findById(G, node.getId());
     if (it != G.end()) {
@@ -86,3 +86,4 @@ map <string, Node> Graph::getList()
 
 	return nodes_with_id;
 }
+

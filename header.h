@@ -5,10 +5,13 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include <random>
+#include <algorithm>
+#include <ctime>
 
 using namespace std;
 
-const int INF = INT_MAX;
+//const int INF = INT_MAX;
 
 /*класс узла*/
 class Node {
@@ -49,7 +52,7 @@ public:
 	int InEdge(string p); //подсчет количества входящих ребер из вершины р
     vector <Node> getG() const; // геттер графа
 	void addN(Node n); // добавить вершину
-	void delN(Node n); // удалить вершину
+	void delN(const Node& n); // удалить вершину
 
 private:
 	unsigned int n; //количество вершин
@@ -58,7 +61,11 @@ private:
 };
 
 /*доп функции*/
-vector<Node>::iterator findById(vector<Node> &nodes, string _id);
+vector<Node>::iterator findById(vector<Node> &nodes, const string& _id);
+Graph randomGraph(int min, int max);
+string randName(Graph g);
+int rand_int(int min, int max);
+mt19937 random_engine();
 
 /*IO*/
 bool check(map <string, map<string, int>> m);

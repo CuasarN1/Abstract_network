@@ -1,15 +1,7 @@
+#include <utility>
+
 #include "header.h"
-#include <random>
 
-
-vector<Node>::iterator findById(vector<Node> &nodes, string _id) {
-    for (auto it = begin(nodes); it != end(nodes); it++) {
-        if (it->getId() == _id)
-            return it;
-    }
-
-    return end(nodes);
-}
 
 Node::Node(string _id) {
     id = std::move(_id);
@@ -36,12 +28,11 @@ vector<Node> Node::getNeighbours() {
 }
 
 void Node::setNeighbours(vector<Node> nbrs) {
-    neighbours = nbrs;
+    neighbours = std::move(nbrs);
 }
 
 void Node::createEvent() {
-    int value;
-    value = rand();
+    int value = rand_int(0, 1);
     events.push_back(value);
 }
 
@@ -61,14 +52,14 @@ void Node::subscribe() {
     }
 
     auto it = allGrandnbrs.cbegin();
-    auto r = rand() % allGrandnbrs.size();
+    auto r = rand_int(0, int(allGrandnbrs.size()));
     advance(it, r);
     neighbours.push_back(*it);
 }
 
 void Node::unsubscribe() {
     auto it = neighbours.cbegin();
-    auto r = rand() % neighbours.size();
+    auto r = rand_int(0, int(neighbours.size()));
     advance(it, r);
     neighbours.erase(it);
 }
