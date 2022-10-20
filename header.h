@@ -8,56 +8,56 @@
 #include <random>
 #include <algorithm>
 #include <ctime>
+#include <utility>
 
 using namespace std;
-
-//const int INF = INT_MAX;
 
 /*класс узла*/
 class Node {
 public:
-    Node(string id);
+    explicit Node(string id);
+    Node(const Node &n);
+    virtual ~Node();
     bool operator== (const Node &n) const;
     bool operator< (const Node &n) const;
     string getId() const;
-    vector<int> getEvents();
-    vector<Node> getNeighbours();
-    void setNeighbours(vector<Node> nbrs);
-
-
-private:
-    vector<int> events;
-    string id;
-    vector<Node> neighbours;
+    vector<int> getEvents() const;
+    vector<pair<Node, bool>> getNeighbours() const;
+    void setNeighbours(vector<pair<Node, bool>> nbrs);
+    void handlerCount(const Node& node);
+    void handlerSum(const Node& node);
 
     void subscribe();
     void unsubscribe();
     void createEvent();
-    void createNode();
+    Node createNode(string name);
 
-
+private:
+    vector<int> events;
+    string id;
+    vector<pair<Node, bool>> neighbours;
 };
 
 /*класс графа*/
 class Graph {
 public:
-	bool operator== (const Graph g) const; //сравнение графов
+	bool operator== (const Graph& g) const; //сравнение графов
     explicit Graph(vector <Node> g); //конструктор
 	Graph(); //пустой граф
 	Graph(const Graph &g); //конструктор-копия
-	~Graph(); //деструктор графа
+	virtual ~Graph(); //деструктор графа
 	bool empty(); //проверка на пустой граф
-	int getN(); //количество вершин
-	int OutEdge(string p); //подсчет количества исходящих ребер из вершины р
-	int InEdge(string p); //подсчет количества входящих ребер из вершины р
+	static unsigned int outEdge(const Node& node); //подсчет количества исходящих ребер из вершины р
+    unsigned int inEdge(const Node& node); //подсчет количества входящих ребер из вершины р
     vector <Node> getG() const; // геттер графа
-	void addN(Node n); // добавить вершину
+	void addN(const Node& n); // добавить вершину
 	void delN(const Node& n); // удалить вершину
+    map <string, Node> getList(); //список вершин
+    void updateNetwork(unsigned short P1, unsigned short P2,
+                unsigned short P3, unsigned short P4); // метод обновления сети
 
 private:
-	unsigned int n; //количество вершин
     vector <Node> G; //список вершин
-    map <string, Node> getList(); //список вершин
 };
 
 /*доп функции*/
@@ -66,9 +66,11 @@ Graph randomGraph(int min, int max);
 string randName(Graph g);
 int rand_int(int min, int max);
 mt19937 random_engine();
+vector<pair<Node, bool>>::iterator find(vector<pair<Node, bool>> &vec, const Node& node);
+
 
 /*IO*/
-bool check(map <string, map<string, int>> m);
 Graph read(const string& path);
-void write(Graph g);
-void show(Graph g);
+void write(const Graph& g);
+void show(const Graph& g);
+void print_handlers(const Graph& g);

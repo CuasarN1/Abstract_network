@@ -1,28 +1,24 @@
 #include "header.h"
 
 Graph::~Graph() {
-	n = 0;
 	G.clear();
 }
 
 Graph::Graph() {
-	G.clear();
-    n = 0;
+	G = vector<Node>();
 }
 
 Graph::Graph(const Graph &g) {
-	this->n = g.n;
-	this->G = g.G;
+	G = g.G;
 }
 
 Graph::Graph(vector <Node> g) {
     G.clear();
-    n = G.size();
     G = std::move(g);
 }
 
-bool Graph::operator== (const Graph g) const {
-	return 	n == g.n and G == g.getG();
+bool Graph::operator== (const Graph& g) const {
+	return G == g.getG();
 }
 
 bool Graph::empty() {
@@ -33,48 +29,38 @@ vector<Node> Graph::getG() const {
 	return G;
 }
 
-int Graph::getN()
+unsigned int Graph::outEdge(const Node& node)
 {
-	return n;
+    return unsigned(node.getNeighbours().size());
 }
 
-int Graph::OutEdge(string p)
-{
-	auto it = findById(G, p);
-	if (it == G.end())
-		return 0;
-	else
-		return it->getNeighbours().size();
-}
-
-int Graph::InEdge(string p)
+unsigned int Graph::inEdge(const Node& node)
 {
 	int cnt = 0;
-	for (auto node : G) {
-        auto nbrs = node.getNeighbours();
-        if (findById(nbrs, p) != end(nbrs))
-            cnt++;
+	for (const auto& e : G) {
+        auto nbrs = e.getNeighbours();
+        for (auto it= begin(nbrs); it != end(nbrs); it++)
+            if (it->first.getId() == node.getId())
+                cnt++;
     }
 
     return cnt;
 }
 
-void Graph::addN(Node node) {
+void Graph::addN(const Node& node) {
     auto it = findById(G, node.getId());
-    if (it == G.end()) {
+    if (it == G.end())
         G.push_back(node);
-        n++;
-    } else
+    else
         cout << "Вершина уже существует" << endl;
 }
 
 void Graph::delN(const Node& node)
 {
     auto it = findById(G, node.getId());
-    if (it != G.end()) {
+    if (it != G.end())
         G.erase(it);
-        n--;
-    } else
+    else
         cout << " Вершины не существует" << endl;
 }
 
@@ -87,3 +73,42 @@ map <string, Node> Graph::getList()
 	return nodes_with_id;
 }
 
+void Graph::updateNetwork(unsigned short P1, unsigned short P2,
+                   unsigned short P3, unsigned short P4) {
+
+    vector<Node> newG;
+
+    for (const auto& node : G) {
+        auto copy_node = Node(node);
+        unsigned short process = rand_int(0, 100);
+
+        if (process <= P1)
+            copy_node.createEvent();
+        else if (process > P1 and process <= P2)
+            copy_node.subscribe();
+        else if (process > P2 and process <= P3)
+            copy_node.unsubscribe();
+        else if (process > P3 and process <= P4)
+        {
+            string name = randName(*this);
+            auto new_node = copy_node.createNode(name);
+            newG.push_back(new_node);
+        }
+        else if (process > P4) {
+            //DO NOTHING
+        }
+
+        if (inEdge(copy_node) != 0 and outEdge(copy_node) != 0)
+            newG.push_back(copy_node);
+    }
+
+//    for (auto out = begin(newG); out != prev(end(newG)); out++)
+//        for (auto in = out + 1; in != end(newG); in++) {
+//            vector<pair<Node, bool>> new_nbrs, nbrs = out->getNeighbours();
+//            for (const auto& node : nbrs)
+//                new_nbrs.emplace_back(*findById(G, node.first.getId()), node.second);
+//            out->setNeighbours(new_nbrs);
+//        }
+
+    G = newG;
+}
