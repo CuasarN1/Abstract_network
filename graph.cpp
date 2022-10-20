@@ -1,5 +1,6 @@
 #include "header.h"
 
+
 Graph::~Graph() {
 	G.clear();
 }
