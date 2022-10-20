@@ -25,14 +25,6 @@ string randName(Graph g) {
     return name;
 }
 
-vector <pair<Node, bool>>::iterator find(vector<pair<Node, bool>> &vec, const Node& node) {
-    for (auto it = begin(vec); it != end(vec); it++)
-        if (it->first.getId() == node.getId())
-            return it;
-
-    return end(vec);
-}
-
 vector<Node>::iterator findById(vector<Node> &nodes, const string& _id) {
     for (auto it = begin(nodes); it != end(nodes); it++) {
         if (it->getId() == _id)
@@ -57,23 +49,14 @@ Graph randomGraph(int min, int max) {
         vector<Node> G_copy(G);
         G_copy.erase(begin(G_copy) + i);
         shuffle(begin(G_copy), end(G_copy), random_engine());
-        vector <pair<Node, bool>> nbrs;
+        map <string, bool> nbrs;
         for (int j = 0; j < nbrs_num; j++) {
             handler = bool(rand_int(0, 1));
-            nbrs.emplace_back(G_copy[j], handler);
+            nbrs.insert({G_copy[j].getId(), handler});
         }
 
         G[i].setNeighbours(nbrs);
     }
-
-//    for (auto out = begin(G); out != prev(end(G)); out++)
-//        for (auto in = out + 1; in != end(G); in++) {
-//            vector<pair<Node, bool>> new_nbrs, nbrs = out->getNeighbours();
-//            for (const auto& node : nbrs)
-//                new_nbrs.emplace_back(*findById(G, node.first.getId()), node.second);
-//            out->setNeighbours(new_nbrs);
-//        }
-
     Graph g = Graph(G);
 
     return g;
@@ -85,7 +68,7 @@ int main() {
 
 //    string file = "../graph.txt";
 //    g = read(file);
-//    show(g);
+    show(g);
 
     unsigned short P1, P2, P3, P4, P5;
 
@@ -94,7 +77,7 @@ int main() {
     cout << "2.\tУзел сети может подписаться на события любого соседа любого своего соседа, кроме самого себя\n";
     cout << "3.\tУзел сети может отписаться от любого своего соседа\n";
     cout << "4.\tУзел может создать новый узел и подписаться на него, при этом новый созданный узел не участвует в текущем обновлении\n";
-    cout << "5.\tУзел не выполняет никаких действий\n";
+    cout << "5.\tУзел не выполняет никаких действий\n\n";
 
     cin >> P1 >> P2 >> P3 >> P4 >> P5;
 
@@ -109,6 +92,8 @@ int main() {
 
             if (g.empty())
                 break;
+
+            // sleep(1);
         }
     }
     else

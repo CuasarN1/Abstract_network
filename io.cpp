@@ -42,22 +42,8 @@ Graph read(const string& path) {
         }
 
         Node node = Node(P1);
+        node.setNeighbours(neighbours);
         G.push_back(node);
-        matrix.insert({P1, neighbours});
-    }
-
-    for (const auto& it : matrix) {
-        string from = it.first;
-        auto to = it.second;
-        auto node = findById(G, from);
-
-        vector<pair<Node, bool>> nbrs;
-        for (const auto& n : to) {
-            auto neighbour = findById(G, n.first);
-            nbrs.emplace_back(*neighbour, n.second);
-        }
-
-        node->setNeighbours(nbrs);
     }
 
     return Graph(G);
@@ -81,8 +67,8 @@ void show(const Graph& g) {
 
         auto nbrs = node.getNeighbours();
         for (auto it = begin(nbrs); it != end(nbrs); it++) {
-            cout << it->first.getId() << '(' << it->second << ')';
-            prev(end(nbrs))->first.getId() == it->first.getId() ? cout << ';' : cout << ", ";
+            cout << it->first << '(' << it->second << ')';
+            prev(end(nbrs))->first == it->first ? cout << ';' : cout << ", ";
         }
         if (nbrs.empty())
             cout << ';';
@@ -93,13 +79,16 @@ void show(const Graph& g) {
 
 void print_handlers(const Graph& g) {
     auto G = g.getG();
-    for (auto node : g.getG()) {
-        for (const auto& nbr : node.getNeighbours()) {
-            if (nbr.second) {
-                node.handlerSum(*findById(G, nbr.first.getId()));
+    for (auto to : g.getG()) {
+        for (const auto& nbr : to.getNeighbours()) {
+            auto from = findById(G, nbr.first);
+            if (from != end(G)) {
+                if (nbr.second)
+                    to.handlerSum(*from);
+                else
+                    to.handlerCount(*from);
             }
-            else
-                node.handlerCount(*findById(G, nbr.first.getId()));
         }
     }
+    cout << endl;
 }

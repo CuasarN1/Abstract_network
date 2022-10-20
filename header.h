@@ -6,9 +6,7 @@
 #include <fstream>
 #include <set>
 #include <random>
-#include <algorithm>
-#include <ctime>
-#include <utility>
+#include <unistd.h>
 
 using namespace std;
 
@@ -22,20 +20,20 @@ public:
     bool operator< (const Node &n) const;
     string getId() const;
     vector<int> getEvents() const;
-    vector<pair<Node, bool>> getNeighbours() const;
-    void setNeighbours(vector<pair<Node, bool>> nbrs);
+    map<string, bool> getNeighbours() const;
+    void setNeighbours(map<string, bool> nbrs);
     void handlerCount(const Node& node);
     void handlerSum(const Node& node);
 
-    void subscribe();
+    void subscribe(const vector <Node>& G);
     void unsubscribe();
     void createEvent();
-    Node createNode(string name);
+    Node createNode(const string& name);
 
 private:
     vector<int> events;
     string id;
-    vector<pair<Node, bool>> neighbours;
+    map<string, bool> neighbours;
 };
 
 /*класс графа*/
@@ -66,7 +64,6 @@ Graph randomGraph(int min, int max);
 string randName(Graph g);
 int rand_int(int min, int max);
 mt19937 random_engine();
-vector<pair<Node, bool>>::iterator find(vector<pair<Node, bool>> &vec, const Node& node);
 
 
 /*IO*/

@@ -40,7 +40,7 @@ unsigned int Graph::inEdge(const Node& node)
 	for (const auto& e : G) {
         auto nbrs = e.getNeighbours();
         for (auto it= begin(nbrs); it != end(nbrs); it++)
-            if (it->first.getId() == node.getId())
+            if (it->first == node.getId())
                 cnt++;
     }
 
@@ -74,7 +74,7 @@ map <string, Node> Graph::getList()
 }
 
 void Graph::updateNetwork(unsigned short P1, unsigned short P2,
-                   unsigned short P3, unsigned short P4) {
+                          unsigned short P3, unsigned short P4) {
 
     vector<Node> newG;
 
@@ -85,30 +85,28 @@ void Graph::updateNetwork(unsigned short P1, unsigned short P2,
         if (process <= P1)
             copy_node.createEvent();
         else if (process > P1 and process <= P2)
-            copy_node.subscribe();
+            copy_node.subscribe(G);
         else if (process > P2 and process <= P3)
             copy_node.unsubscribe();
-        else if (process > P3 and process <= P4)
-        {
+        else if (process > P3 and process <= P4) {
             string name = randName(*this);
             auto new_node = copy_node.createNode(name);
             newG.push_back(new_node);
-        }
-        else if (process > P4) {
+        } else if (process > P4) {
             //DO NOTHING
         }
 
-        if (inEdge(copy_node) != 0 and outEdge(copy_node) != 0)
-            newG.push_back(copy_node);
+
+        newG.push_back(copy_node);
     }
 
-//    for (auto out = begin(newG); out != prev(end(newG)); out++)
-//        for (auto in = out + 1; in != end(newG); in++) {
-//            vector<pair<Node, bool>> new_nbrs, nbrs = out->getNeighbours();
-//            for (const auto& node : nbrs)
-//                new_nbrs.emplace_back(*findById(G, node.first.getId()), node.second);
-//            out->setNeighbours(new_nbrs);
-//        }
-
     G = newG;
+
+    auto it = begin(G);
+    while (it != end(G)) {
+        if (inEdge(*it) == 0 and outEdge(*it) == 0)
+            G.erase(it);
+        else
+            it++;
+    }
 }
