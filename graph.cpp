@@ -1,41 +1,41 @@
 #include "header.h"
 
 
-Graph::~Graph() {
+Graph::~Graph() {  // деструктор графа
 	G.clear();
 }
 
-Graph::Graph() {
+Graph::Graph() {  // пустой конструктор графа
 	G = vector<Node>();
 }
 
-Graph::Graph(const Graph &g) {
+Graph::Graph(const Graph &g) {  // конструктор копирования графа
 	G = g.G;
 }
 
-Graph::Graph(vector <Node> g) {
+Graph::Graph(vector <Node> g) {  // конструктор графа
     G.clear();
     G = std::move(g);
 }
 
-bool Graph::operator== (const Graph& g) const {
+bool Graph::operator== (const Graph& g) const {  // оператор равенства графов
 	return G == g.getG();
 }
 
-bool Graph::empty() {
+bool Graph::empty() {  // функция очистки графа
 	return G.empty();
 }
 
-vector<Node> Graph::getG() const {
+vector<Node> Graph::getG() const {  // геттер матрицы смежности графа
 	return G;
 }
 
-unsigned int Graph::outEdge(const Node& node)
+unsigned int Graph::outEdge(const Node& node)  // функция получения исходящих ребер для указанного вершины орграфа
 {
     return unsigned(node.getNeighbours().size());
 }
 
-unsigned int Graph::inEdge(const Node& node)
+unsigned int Graph::inEdge(const Node& node)  // функция получения входящих ребер для указанного вершины орграфа
 {
 	int cnt = 0;
 	for (const auto& e : G) {
@@ -48,7 +48,7 @@ unsigned int Graph::inEdge(const Node& node)
     return cnt;
 }
 
-void Graph::addN(const Node& node) {
+void Graph::addN(const Node& node) {  // функция добавления вершины
     auto it = findById(G, node.getId());
     if (it == G.end())
         G.push_back(node);
@@ -56,7 +56,7 @@ void Graph::addN(const Node& node) {
         cout << "Вершина уже существует" << endl;
 }
 
-void Graph::delN(const Node& node)
+void Graph::delN(const Node& node)  // функция удаления вершины
 {
     auto it = findById(G, node.getId());
     if (it != G.end())
@@ -65,7 +65,7 @@ void Graph::delN(const Node& node)
         cout << " Вершины не существует" << endl;
 }
 
-map <string, Node> Graph::getList()
+map <string, Node> Graph::getList()  // функция получения словаря id: вершина
 {
 	map <string, Node> nodes_with_id;
 	for (auto it = begin(G); it != end(G); it++)
@@ -76,7 +76,7 @@ map <string, Node> Graph::getList()
 
 void Graph::updateNetwork(unsigned short P1, unsigned short P2,
                           unsigned short P3, unsigned short P4) {
-
+    // функция обновления графа
     vector<Node> newG;
 
     for (const auto& node : G) {
@@ -96,7 +96,6 @@ void Graph::updateNetwork(unsigned short P1, unsigned short P2,
         } else if (process > P4) {
             //DO NOTHING
         }
-
 
         newG.push_back(copy_node);
     }

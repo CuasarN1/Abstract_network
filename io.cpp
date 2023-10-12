@@ -1,13 +1,12 @@
 #include "header.h"
 
 
-Graph read(const string& path) {
+Graph::Graph(const string& path) {  // функция чтения графа из файла по указанному пути
 	ifstream in;
 	in.open(path);
 
 	string P1, P2, ln;
     vector <string> lines;
-	vector<Node> G;
     map<string, map<string, bool>> matrix;
     map<string, bool> neighbours;
 
@@ -45,11 +44,9 @@ Graph read(const string& path) {
         node.setNeighbours(neighbours);
         G.push_back(node);
     }
-
-    return Graph(G);
 }
 
-void write(const Graph& g) {
+void Graph::write() {  // функция записи графа в файл
 	string path = "../output.txt";
 	ofstream of;
 	of.open(path);
@@ -59,9 +56,7 @@ void write(const Graph& g) {
 	of.close();
 }
 
-void show(const Graph& g) {
-	auto G = g.getG();
-
+void Graph::show() {  // функция отображения графа в консоли
     for (const auto& node : G) {
         cout << node.getId() << " : ";
 
@@ -77,9 +72,8 @@ void show(const Graph& g) {
     cout << endl;
 }
 
-void print_handlers(const Graph& g) {
-    auto G = g.getG();
-    for (auto to : g.getG()) {
+void Graph::print_handlers() {
+    for (auto to : G) {
         for (const auto& nbr : to.getNeighbours()) {
             auto from = findById(G, nbr.first);
             if (from != end(G)) {

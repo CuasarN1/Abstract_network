@@ -1,4 +1,5 @@
 #pragma once
+#include "algorithm"
 #include <map>
 #include <string>
 #include <vector>
@@ -56,6 +57,12 @@ public:
     void updateNetwork(unsigned short P1, unsigned short P2,
                        unsigned short P3, unsigned short P4); // метод обновления сети
 
+    // IO
+    Graph(const string& path); // чтение графа из файла
+    void write(); // запись графа в файл
+    void show(); // вывод графа в консоль
+    void print_handlers(); // вывод в консоль обработчиков событий для всех подписок
+
 private:
     vector <Node> G; //список вершин
 };
@@ -66,9 +73,3 @@ Graph randomGraph(int min, int max); // генерация случайного 
 string randName(Graph g); // случайное имя узла уникальное для графа g
 int rand_int(int min, int max); // случайное число в диапазоне min-max
 mt19937 random_engine(); // вихрь Мерсенна
-
-/*IO*/
-Graph read(const string& path); // чтение графа из файла
-void write(const Graph& g); // запись графа в файл
-void show(const Graph& g); // вывод графа в консоль
-void print_handlers(const Graph& g); // вывод в консоль обработчиков событий для всех подписок

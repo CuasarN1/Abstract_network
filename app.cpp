@@ -68,8 +68,8 @@ int main() {
     g = randomGraph(5, 15);
 
 //    string file = "../graph.txt";
-//    g = read(file);
-    show(g);
+//    g = Graph(file);
+    g.show();
 
     unsigned short P1, P2, P3, P4, P5;
 
@@ -89,7 +89,7 @@ int main() {
 
         while (true) {
             g.updateNetwork(P1, P2, P3, P4);
-            print_handlers(g);
+            g.print_handlers();
 
             if (g.empty())
                 break;
